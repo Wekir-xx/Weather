@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(w VERSION 0.1 LANGUAGES CXX)
+project(Weather VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -20,39 +20,39 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(w
+    qt_add_executable(Weather
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         weather.cpp
         weather.h
     )
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET w APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#    set_property(TARGET Weather APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(w SHARED
+        add_library(Weather SHARED
             ${PROJECT_SOURCES}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(w
+        add_executable(Weather
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_link_libraries(w PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(Weather PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.w)
+  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Weather)
 endif()
-set_target_properties(w PROPERTIES
+set_target_properties(Weather PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -61,12 +61,12 @@ set_target_properties(w PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS w
+install(TARGETS Weather
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(w)
+    qt_finalize_executable(Weather)
 endif()
