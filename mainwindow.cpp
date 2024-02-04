@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->time->setText ("<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; font-weight:700;\">" +
                        QTime::currentTime().toString("hh:mm") + "</span></p></body></html>");
 
+
+
     QBrush brush;
     brush.setTextureImage (QImage(":/images/sky.jpg").scaled (375,500));
     QPalette palete;
@@ -60,7 +62,7 @@ void MainWindow::getWeather(QNetworkReply *reply)
     QString temp = QString::number(obj["temp_c"].toInt());
     ui->temperature->setText ("<html><head/><body><p align=\"center\"><span style=\" font-size:34pt;\">" + temp
                               + " C</span><span style=\" font-size:34pt; vertical-align:super;\">0</span></p></body></html>");
-    temp = QString::number(obj["wind_kph"].toInt());
+    temp = QString::number(int(obj["wind_kph"].toDouble()));
     ui->speed->setText ("<html><head/><body><p align=\"center\"><span style=\" font-family:\'Courier New\'; font-size:11pt; font-weight:700; color:#000000;\">"
                         + temp + " km/h</span></p></body></html>");
     val = obj.value ("condition");
@@ -68,8 +70,16 @@ void MainWindow::getWeather(QNetworkReply *reply)
     ui->condition->setText ("<html><head/><body><p><span style=\" font-family:\'Courier New\'; font-size:11pt; font-weight:700; color:#000000;\">"
                        + obj["text"].toString () + "</span></p></body></html>");
 
+    QString time_day;
+    if(QTime::currentTime().toString("h").toInt() > 8 && QTime::currentTime().toString("h").toInt() < 23)
+        time_day = "day/";
+    else
+        time_day = "night/";
     if(obj["text"].toString() == "Partly cloudy")
-        ui->picture->setPixmap (QPixmap(":/images/partly_cloudy.png"));
+        time_day += "116.png";
+    else if(obj["text"].toString() == "Light rain")
+        time_day += "296.png";
+    ui->picture->setPixmap (QPixmap(QString(":/images/weather/%1").arg(time_day)));
     ui->picture->setScaledContents (true);
 
     reply->deleteLater ();

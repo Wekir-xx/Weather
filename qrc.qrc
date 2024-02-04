@@ -2,6 +2,9 @@
     <qresource prefix="/">
         <file>images/icon.jpg</file>
         <file>images/sky.jpg</file>
-        <file>images/partly_cloudy.png</file>
+        <file>images/weather/day/116.png</file>
+        <file>images/weather/day/296.png</file>
+        <file>images/weather/night/116.png</file>
+        <file>images/weather/night/296.png</file>
     </qresource>
 </RCC>
