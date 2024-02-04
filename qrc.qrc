@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>images/icon.jpg</file>
         <file>images/sky.jpg</file>
+        <file>images/partly_cloudy.png</file>
     </qresource>
 </RCC>

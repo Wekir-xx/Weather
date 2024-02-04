@@ -5,6 +5,7 @@
 #include <QNetworkReply>
 #include <QUrl>
 #include <QTime>
+#include <QPixmap>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
@@ -31,8 +32,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-    delete API_GEO;
-    delete API_WEATHER;
 }
 
 void MainWindow::getGeo(QNetworkReply *reply)
@@ -55,12 +54,23 @@ void MainWindow::getWeather(QNetworkReply *reply)
 {
     QJsonDocument doc = QJsonDocument::fromJson(reply->readAll());
     QJsonObject obj = doc.object ();
+
     QJsonValue val = obj.value("current");
     obj = val.toObject ();
     QString temp = QString::number(obj["temp_c"].toInt());
-
     ui->temperature->setText ("<html><head/><body><p align=\"center\"><span style=\" font-size:34pt;\">" + temp
                               + " C</span><span style=\" font-size:34pt; vertical-align:super;\">0</span></p></body></html>");
+    temp = QString::number(obj["wind_kph"].toInt());
+    ui->speed->setText ("<html><head/><body><p align=\"center\"><span style=\" font-family:\'Courier New\'; font-size:11pt; font-weight:700; color:#000000;\">"
+                        + temp + " km/h</span></p></body></html>");
+    val = obj.value ("condition");
+    obj = val.toObject ();
+    ui->condition->setText ("<html><head/><body><p><span style=\" font-family:\'Courier New\'; font-size:11pt; font-weight:700; color:#000000;\">"
+                       + obj["text"].toString () + "</span></p></body></html>");
+
+    if(obj["text"].toString() == "Partly cloudy")
+        ui->picture->setPixmap (QPixmap(":/images/partly_cloudy.png"));
+    ui->picture->setScaledContents (true);
 
     reply->deleteLater ();
     this->show ();
