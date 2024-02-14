@@ -20,6 +20,7 @@ public:
     ~MainWindow();
 
 private slots:
+    void updateWeather();
     void getGeo(QNetworkReply *reply);
     void getWeather(QNetworkReply *reply);
 
